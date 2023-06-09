@@ -1,0 +1,117 @@
+html {
+    font-size: 16px;
+}
+
+:root {
+    --primary-color: #A020F0;
+    --text-color: #000;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;   
+}
+
+nav, .hero-image, .card-container {
+    margin-inline: auto !important;
+    padding-inline: 30px !important;
+    width: 80%;
+}
+
+nav {
+    border-radius: 0 0 5px 5px !important;
+    padding-inline: 10px !important;
+    height: auto;
+}
+
+.navbar-brand {
+    text-transform: uppercase !important;
+    color: var(--primary-color);
+    font-weight: 600;
+    letter-spacing: 1.2pt;
+    white-space: wrap;
+}
+
+.container-fluid {
+    width: 80%;
+    margin-inline: auto;
+}
+
+.hero-image {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    object-fit: contain;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    border-radius: 5px;
+}
+
+.hero-image::before {
+    content: "";
+    background: url("https://cosmosgroup.sgp1.cdn.digitaloceanspaces.com/news/9608604.webp");
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.4;
+}
+
+#hero-main-text, #hero-sub-text {
+    position: relative;
+}
+
+#hero-main-text {
+    text-transform: uppercase;
+    letter-spacing: 2pt;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.card-container {
+    padding: 20px 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-title {
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    color: var(--primary-color);
+    margin: unset;
+    padding-top: 10px;
+}
+
+#contest-cards {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    width: 18rem; 
+    padding: 10px;
+    position: relative;
+    justify-content: space-between;
+}
+
+
+@media (max-width: 500px) {
+
+    nav form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #search-box {
+        margin-bottom: 10px;
+    }
+
+    #hero-main-text {
+        letter-spacing: unset;
+        color: #fff;
+    }
+}
