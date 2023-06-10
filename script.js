@@ -11,6 +11,7 @@ const coding_images = [
     'https://images.unsplash.com/photo-1536148935331-408321065b18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fHByb2dyYW1taW5nfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
 ]
 
+const searchBox = document.querySelector('#search-box');
 
 // Fetching API
 let api = "https://kontests.net/api/v1/all";
@@ -19,39 +20,86 @@ let response = fetch(api);
 response.then((value) => {
     return value.json();
 }).then((value) => {
+
     let cardContents = "";
+    let contest_platform = new Array();
+
     for (contests of value) {
-        let randIndex = Math.floor(Math.random() * coding_images.length);
-        let image_url = coding_images[randIndex];
-        cardContents += `<div class="card my-2 mx-2">
-          <img src=${image_url} width="100%" height="200px" alt="Coding Picture">
-          <h6 class="card-title">${contests["name"]}</h6>
-          <p class="card-text">
-            <p><b>Site</b>: ${contests["site"]}</p>
-            <p><b>Contest Date</b>: ${(contests["start_time"].slice(8,10))}-${(contests["start_time"].slice(5,7))}-${(contests["start_time"].slice(0,4))}</p>
-          </p>
-          <a href="${contests["url"]}" class="btn btn-primary">Visit Contest</a>
-        </div>
-        </div>`
 
-      //<p><b>Duration</b>: ${contests["duration"]} minutes</p>
-      //<p><b>Start Time</b>: ${(contests["start_time"].slice(11,16))}</p>
-      //<p><b>End Time</b>: ${(contests["end_time"].slice(11,16))}</p>
+      contest_platform.push(contests["site"]);
 
-        if (contests["status"] == "BEFORE") {
-            document.querySelector('#contest-cards').insertAdjacentHTML("afterbegin", cardContents);
+      let randIndex = Math.floor(Math.random() * coding_images.length);
+      let image_url = coding_images[randIndex];
+
+      if (contests["status"] == "BEFORE") {
+        
+        cardContents = `<div class="card my-2 mx-2">
+            <img src=${image_url} width="100%" height="200px" alt="Coding Picture">
+            <h6 class="card-title">${contests["name"]}</h6>
+            <p class="card-text">
+              <p><b>Site</b>: ${contests["site"]}</p>
+              <p><b>Contest Date</b>: ${(contests["start_time"].slice(8,10))}-${(contests["start_time"].slice(5,7))}-${(contests["start_time"].slice(0,4))}</p>
+            </p>
+            <a href="${contests["url"]}" class="btn btn-primary">Visit Contest</a>
+            </div>
+            </div>`
+
+        document.querySelector('#contest-cards').insertAdjacentHTML("afterbegin", cardContents);
+
+      }
+
+    }
+
+    // Array containing all contest platform names for search autocomplete feature
+    contest_platform = [... new Set(contest_platform)];
+
+    // IMPLEMENTING SEARCH FILTER
+
+    let node_cards = Array.from(document.querySelector('#contest-cards').childNodes);
+    let node_length = node_cards.length;
+
+    // Creating an array of only card divs
+    let card_divs = new Array();
+    for (cards of node_cards) {
+      if (cards.nodeName != "#text") {
+          card_divs.push(cards);
         }
     }
 
+    let input = '';
+    searchBox.addEventListener('input', (event) => {
+
+    let existing_cards = card_divs.length;
+
+    if (event.data != null) {
+      input += event.data.toUpperCase();
+    }
+    else {
+      let length = input.length;
+      input = input.slice(0, length-1); // Removing the last character
+    }
+
+    for (let i = 0; i < existing_cards; i++) {
+      try {
+        if (card_divs[i].childNodes[6].textContent.slice(6).slice(0, (input.length)).toUpperCase() !== input) {
+          card_divs[i].classList.add('hidden');
+        }
+        else {
+          card_divs[i].classList.remove('hidden');
+        }
+      }
+      catch {
+        console.log();
+      }
+      
+    }
+
+    // IMPLEMENTING AUTOCOMPLETE FEATURE
+
+
+
+    });
+
+
+
 })
-
-// // Activating filter search
-// const searchBox = document.querySelector('#search-box');
-
-// searchBox.addEventListener('input', filterSearch);
-
-// function filterSearch() {
-//     const input = searchBox.value.toLowerCase();
-
-
-// }
